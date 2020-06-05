@@ -146,7 +146,7 @@ int main(int argc, char const *argv[]){
             }
 
             /* print some text */
-            fprintf(f, "%s", message);
+            fprintf(f, "%s", buffer);
 
             fclose(f);
             
