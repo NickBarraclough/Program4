@@ -203,7 +203,9 @@ int main(int argc, char const *argv[]){
             /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
 
             if (postMode == 0){
-                charsRead = send(establishedConnectionFD, decryptMessage(key, message), strlen(message), 0); // Send decrypted message back
+                char * messageDec = decryptMessage(key, message);
+                printf("%s\n",messageDec);
+                charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
             } else {
                 charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
