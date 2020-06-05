@@ -84,7 +84,7 @@ void enc(int argc, char *argv[]){
     if(keyLength < messageLength){
         error("Key is too short");
     } else {
-        printf("Key length = %d, message = %d\n");
+        printf("Key length = %d, message = %d\n", keyLength, messageLength);
     }
 
     
