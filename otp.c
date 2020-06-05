@@ -177,7 +177,7 @@ void enc(int argc, char *argv[]){
     }
 
     /* SEND THE KEY TO SERVER */
-    charsWritten = send(socketFD, key, strlen(key), 0);  // Send key to server and write to the server
+//    charsWritten = send(socketFD, key, strlen(key), 0);  // Send key to server and write to the server
 
     for (charsWritten = 0; charsWritten < strlen(key); charsWritten += send(socketFD, key, strlen(key) - charsWritten, 0)){
         printf("Sent: %d bytes in the key \n", charsWritten);
