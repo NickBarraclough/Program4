@@ -137,9 +137,7 @@ void enc(int argc, char *argv[]){
 
     /* SEND THE KEY LENGTH TO SERVER*/
 //    charsWritten = send(socketFD, keyLengthChar, strlen(keyLengthChar), 0);  // Send message to server and write to the server
-    for (charsWritten = 0; charsWritten < keyLength; charsWritten += send(socketFD, keyLengthChar, strlen(keyLengthChar) - charsWritten, 0)){
-        printf("Sent: %d bytes in the message \n", charsWritten);
-    }
+    send(socketFD, keyLengthChar, strlen(keyLengthChar), 0);
 
     if (charsWritten < 0){  // Check for error when writing to socket
       error("CLIENT: ERROR writing to socket");
