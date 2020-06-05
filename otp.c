@@ -38,7 +38,7 @@ void enc(int argc, char *argv[]){
     int socketFD, portNumber, charsWritten, charsRead;
     struct sockaddr_in serverAddress;
     struct hostent* serverHostInfo;
-    char buffer[1000];
+    char buffer[80000];
     
     // Check usage & args
     if (argc < 6) {
@@ -226,7 +226,7 @@ void dec(int argc, char* argv[]){
     long int keyLength;
     char messageLengthC[1000];
     char keyLengthC[1000];
-    char buffer[1000];
+    char buffer[80000];
     char message[1000];
     char key[1000];
     char usern[100];
