@@ -219,7 +219,7 @@ int main(int argc, char const *argv[]){
                 fprintf(f, "%s", messageDec);
 
                 fclose(f);
-                printf("ciphertext1")
+                printf("ciphertext1");
                 
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
             } else {
