@@ -94,7 +94,7 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0){  // Check for an error when reading from socket
                 error("ERROR reading from socket");
             }
-            printf("We read: %s\n", buffer);
+//            printf("We read: %s\n", buffer);
 
             messageLength = atoi(buffer);  // Send a Success message back to the client
             charsRead = send(establishedConnectionFD, "xMarker", 1, 0); // Send success back
@@ -113,7 +113,7 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
-            printf("We read: %s\n", buffer);
+//            printf("We read: %s\n", buffer);
 
 
             keyLength = atoi(buffer);  // Send a Success message back to the client
@@ -135,7 +135,7 @@ int main(int argc, char const *argv[]){
             if (i < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
-            printf("We read: %s\n", buffer);
+//            printf("We read: %s\n", buffer);
 
             strcat(message, buffer);  // Adds read data to the destination of choice
             messageLength -= strlen(buffer);
@@ -207,7 +207,7 @@ int main(int argc, char const *argv[]){
 
             if (postMode == 0){
                 messageDec = decryptMessage(key, message);
-                printf("%s\n",messageDec);
+//                printf("%s\n",messageDec);
                 //charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
             } else {
                 //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
