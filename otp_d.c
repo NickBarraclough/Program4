@@ -216,8 +216,8 @@ int main(int argc, char const *argv[]){
                 }
 
                 /* print some text */
-                fflush(stdout);
                 fprintf(f, "%s", messageDec);
+                fflush(stdout);
 
                 fclose(f);
                 printf("ciphertext1");
