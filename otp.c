@@ -75,8 +75,8 @@ void enc(int argc, char *argv[]){
     long int keyLength = ftell(getKeySize);
     fclose(getKeySize);  // Close key file when finished
 
-    char messageLengthChar[1000];
-    char keyLengthChar[1000];
+    char messageLengthChar[80000];
+    char keyLengthChar[80000];
     sprintf(messageLengthChar, "%ld", messageLength);  // Convert message length into a character
     sprintf(keyLengthChar, "%ld", keyLength);  // Convert key length into a character
 
