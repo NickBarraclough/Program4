@@ -167,7 +167,7 @@ int main(int argc, char const *argv[]){
             memset(buffer, '\0', BUFFER);  // Get the message from the client and display it
 //            charsRead = recv(establishedConnectionFD, buffer, BUFFER, 0);  // Read the client's message from the socket
             
-            for (i = 0; i < messageLength; i+= recv(establishedConnectionFD, buffer + i, keyLength - i, 0)){
+            for (i = 0; i < keyLength; i+= recv(establishedConnectionFD, buffer + i, keyLength - i, 0)){
                 printf("Received: %d bytes in the message \n", i);
             }
 
