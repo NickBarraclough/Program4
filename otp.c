@@ -287,6 +287,12 @@ void dec(int argc, char* argv[]){
     keyLength = ftell(findKeySize);
     fclose(findKeySize);  // Close the key file once finished
 
+    if(keyLength < messageLength){
+        error("Key is too short");
+        
+    }
+    
+    
     sprintf(messageLengthC, "%ld", messageLength);
     sprintf(keyLengthC, "%ld", keyLength);
 
