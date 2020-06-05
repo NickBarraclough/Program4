@@ -65,6 +65,10 @@ int main(int argc, char const *argv[]){
         
         // Accept a connection, blocking if one is not available until one connects
         sizeOfClientInfo = sizeof(clientAddress);  // Get size of address for client that will connect
+        
+        // TODO: Check if there are already 5 processes running, if so deny the connection
+
+        
         establishedConnectionFD = accept(listenSocketFD, (struct sockaddr *)&clientAddress, &sizeOfClientInfo); // Accept
 
         sleep(2);
@@ -72,7 +76,7 @@ int main(int argc, char const *argv[]){
         if (establishedConnectionFD < 0){  // Check that connection has been established
             error("ERROR on accept");
         }
-
+        printf("We got connection \n");
         pid = fork();  // Retrieve the PID
 
         if (pid < 0){  // If PID is less then zero, error with the fork process
@@ -90,6 +94,7 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0){  // Check for an error when reading from socket
                 error("ERROR reading from socket");
             }
+            printf("We read: %s\n", buffer);
 
             messageLength = atoi(buffer);  // Send a Success message back to the client
             charsRead = send(establishedConnectionFD, "xMarker", 1, 0); // Send success back
@@ -106,6 +111,8 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
+            printf("We read: %s\n", buffer);
+
 
             keyLength = atoi(buffer);  // Send a Success message back to the client
             charsRead = send(establishedConnectionFD, "I am the server, and I got your keyLength", 39, 0); // Send success back
@@ -122,6 +129,7 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
+            printf("We read: %s\n", buffer);
 
             strcat(message, buffer);  // Adds read data to the destination of choice
             messageLength -= strlen(buffer);
@@ -183,8 +191,8 @@ int main(int argc, char const *argv[]){
 
             /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
 
-            if (postMode == 1){
-                charsRead = send(establishedConnectionFD, decryptMessage(key, message), strlen(message), 0); // Send encrypted message back
+            if (postMode == 0){
+                charsRead = send(establishedConnectionFD, decryptMessage(key, message), strlen(message), 0); // Send decrypted message back
             } else {
                 charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
