@@ -113,8 +113,11 @@ void enc(int argc, char *argv[]){
         error("CLIENT: ERROR connecting");
     
     /* SEND THE MESSAGE LENGTH TO SERVER*/
-    charsWritten = send(socketFD, messageLengthChar, strlen(messageLengthChar), 0);  // Send message to server and write to the server
-
+    for (charsWritten = 0; charsWritten < messageLength; charsWritten += send(socketFD, messageLengthChar + charsWritten, strlen(messageLengthChar) - charsWritten, 0);){
+        printf("Sent: %d bytes in the message \n", i);
+    }
+    
+    
     if (charsWritten < 0){  // Check for an error when writing to the socket
       error("CLIENT: ERROR writing to socket");
     }
@@ -135,7 +138,10 @@ void enc(int argc, char *argv[]){
     }
 
     /* SEND THE KEY LENGTH TO SERVER*/
-    charsWritten = send(socketFD, keyLengthChar, strlen(keyLengthChar), 0);  // Send message to server and write to the server
+//    charsWritten = send(socketFD, keyLengthChar, strlen(keyLengthChar), 0);  // Send message to server and write to the server
+    for (charsWritten = 0; charsWritten < keyLength; charsWritten += send(socketFD, keyLengthChar + charsWritten, strlen(keyLengthChar) - charsWritten, 0);){
+        printf("Sent: %d bytes in the message \n", i);
+    }
 
     if (charsWritten < 0){  // Check for error when writing to socket
       error("CLIENT: ERROR writing to socket");
