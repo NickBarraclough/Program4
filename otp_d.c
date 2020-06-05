@@ -9,7 +9,7 @@
 
 /* Global Variables */
 
-#define BUFFER (int)2194304
+#define BUFFER (int)104304
 
 /* Function Prototypes */
 char* decryptMessage(char*, char*);
