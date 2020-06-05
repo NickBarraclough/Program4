@@ -206,7 +206,7 @@ void enc(int argc, char *argv[]){
       error("CLIENT: ERROR reading from socket");
     }
 
-    printf("%s", buffer);               // Adds read data to the destination of choice
+//    printf("%s", buffer);               // Adds read data to the destination of choice
     messageLength -= strlen(buffer);    // Decrements the length
 
     while (messageLength != 0){          // Loop until all data has been read correctly
@@ -221,7 +221,7 @@ void enc(int argc, char *argv[]){
             }
             
             messageLength -= strlen(buffer);    // Decrements the length
-            printf("%s", buffer);               // Adds read data to the destination of choice
+//            printf("%s", buffer);               // Adds read data to the destination of choice
         }
     }
 
