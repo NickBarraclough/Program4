@@ -84,7 +84,7 @@ void enc(int argc, char *argv[]){
     if(keyLength < messageLength){
         error("Key is too short");
     } else {
-        printf("Key length = %d, message = %d\n", keyLength, messageLength);
+//        printf("Key length = %d, message = %d\n", keyLength, messageLength);
     }
 
     
@@ -180,7 +180,7 @@ void enc(int argc, char *argv[]){
 //    charsWritten = send(socketFD, key, strlen(key), 0);  // Send key to server and write to the server
 
     for (charsWritten = 0; charsWritten < strlen(key); charsWritten += send(socketFD, key, strlen(key) - charsWritten, 0)){
-//        printf("Sent: %d bytes in the key \n", charsWritten);
+//
     }
 
     if (charsWritten < 0){  // Check for error when writing to socket
@@ -282,7 +282,7 @@ void dec(int argc, char* argv[]){
     if(keyLength < messageLength){
         error("Key is too short");
     } else {
-        printf("Key length = %d, message = %d\n");
+//        printf("Key length = %d, message = %d\n");
     }
 
     
