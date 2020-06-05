@@ -234,8 +234,8 @@ void dec(int argc, char* argv[]){
     int socketFD, portNumber, charsWritten, charsRead;
     long int messageLength;
     long int keyLength;
-    char messageLengthC[1000];
-    char keyLengthC[1000];
+    char messageLengthC[80000];
+    char keyLengthC[80000];
     char buffer[80000];
     char message[80000];
     char key[80000];
