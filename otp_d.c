@@ -220,6 +220,8 @@ int main(int argc, char const *argv[]){
 
                 fclose(f);
                 
+                printf("ciphertext1");
+                
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
             } else {
                 //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
