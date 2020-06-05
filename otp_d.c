@@ -202,12 +202,12 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0)  // Checks for an error when writing to the socket
                 error("ERROR writing to socket");
 
-
+            printf("here 1\n");
             if (postMode == 0){
                 // Write the encrypted messaged to the client
                 char * messageDec = encryptMessage(key, message);
 //                printf("%s\n",messageDec);
-                
+                printf("here 2\n");
                 FILE *f = fopen("ciphertext1", "w");
                 if (f == NULL)
                 {
@@ -219,7 +219,6 @@ int main(int argc, char const *argv[]){
                 fprintf(f, "%s", messageDec);
 
                 fclose(f);
-                
                 printf("ciphertext1")
                 
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
