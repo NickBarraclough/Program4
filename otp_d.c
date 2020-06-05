@@ -76,7 +76,7 @@ int main(int argc, char const *argv[]){
         if (establishedConnectionFD < 0){  // Check that connection has been established
             error("ERROR on accept");
         }
-        printf("We got connection \n");
+//        printf("We got connection \n");
         pid = fork();  // Retrieve the PID
 
         if (pid < 0){  // If PID is less then zero, error with the fork process
