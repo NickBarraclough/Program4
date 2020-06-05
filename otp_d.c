@@ -127,7 +127,7 @@ int main(int argc, char const *argv[]){
 
             memset(buffer, '\0', BUFFER);  // Get the message from the client and display it
             
-            for (i = 0; i < keyLength; i+= recv(establishedConnectionFD, buffer + i, keyLength - i, 0)){
+            for (i = 0; i < messageLength; i+= recv(establishedConnectionFD, buffer + i, messageLength - i, 0)){
                 printf("Received: %d bytes in the message \n", i);
             }
 
