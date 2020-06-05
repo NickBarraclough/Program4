@@ -138,19 +138,6 @@ int main(int argc, char const *argv[]){
 //            printf("We read: %s\n", buffer);
 
             
-            FILE *f = fopen("ciphertext1", "w");
-            if (f == NULL)
-            {
-                printf("Error opening file!\n");
-                exit(1);
-            }
-
-            /* print some text */
-            fprintf(f, "%s", buffer);
-
-            fclose(f);
-            
-            
             
             strcat(message, buffer);  // Adds read data to the destination of choice
             messageLength -= strlen(buffer);
@@ -215,15 +202,25 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0)  // Checks for an error when writing to the socket
                 error("ERROR writing to socket");
 
-            /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
-            char * messageDec = decryptMessage(key, message);
-            printf("ciphertext1\n");
-            charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
 
             if (postMode == 0){
-                messageDec = decryptMessage(key, message);
+                // Write the encrypted messaged to the client
+                char * messageDec = encryptMessage(key, message);
 //                printf("%s\n",messageDec);
-                //charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
+                
+                FILE *f = fopen("ciphertext1", "w");
+                if (f == NULL)
+                {
+                    printf("Error opening file!\n");
+                    exit(1);
+                }
+
+                /* print some text */
+                fprintf(f, "%s", messageDec);
+
+                fclose(f);
+                
+                charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
             } else {
                 //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
