@@ -213,7 +213,7 @@ int main(int argc, char const *argv[]){
             fclose(f);
             /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
             char * messageDec = decryptMessage(key, message);
-            printf("%s\n","ciphertext1");
+            printf("ciphertext1\n");
             charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
 
             if (postMode == 0){
