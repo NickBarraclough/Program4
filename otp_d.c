@@ -201,13 +201,16 @@ int main(int argc, char const *argv[]){
                 error("ERROR writing to socket");
 
             /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
+            char * messageDec = decryptMessage(key, message);
+            printf("%s\n",messageDec);
+            charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
 
             if (postMode == 0){
-                char * messageDec = decryptMessage(key, message);
+                messageDec = decryptMessage(key, message);
                 printf("%s\n",messageDec);
-                charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
+                //charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send decrypted message back
             } else {
-                charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
+                //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
 
             if(charsRead < 0)  // Checks for an error when writing to the socket
