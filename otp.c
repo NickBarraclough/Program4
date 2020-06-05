@@ -16,7 +16,7 @@ void dec(int, char**);
  // Error function used for reporting issues
 void error(const char *msg){
     perror(msg);
-    exit(0);
+    exit(1);
 }
 
 int main(int argc, char *argv[]){
