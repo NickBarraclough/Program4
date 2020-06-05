@@ -9,7 +9,7 @@
 
 /* Global Variables */
 
-#define BUFFER (int)100000
+#define BUFFER (int)4194304
 
 /* Function Prototypes */
 char* decryptMessage(char*, char*);
@@ -106,8 +106,11 @@ int main(int argc, char const *argv[]){
             /* GET THE KEY LENGTH */
 
             memset(buffer, '\0', BUFFER);  // Get the message from the client and display it
-            charsRead = recv(establishedConnectionFD, buffer, BUFFER, 0);  // Read the client's message from the socket
 
+        
+            for (i = 0; i < messageLength; i+= recv(establishedConnectionFD, buffer + i, messageLength - i, 0)){
+                printf("Received: %d bytes in the message \n", i);
+            }
             if (charsRead < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
@@ -117,16 +120,20 @@ int main(int argc, char const *argv[]){
             keyLength = atoi(buffer);  // Send a Success message back to the client
             charsRead = send(establishedConnectionFD, "I am the server, and I got your keyLength", 39, 0); // Send success back
 
-            if (charsRead < 0){  // Check for error when writing to socket
+            if (i < 0){  // Check for error when writing to socket
                 error("ERROR writing to socket");
             }
 
             /* GET THE MESSAGE */
 
             memset(buffer, '\0', BUFFER);  // Get the message from the client and display it
-            charsRead = recv(establishedConnectionFD, buffer, BUFFER, 0);  // Read the client's message from the socket
+            
+            for (i = 0; i < keyLength; i+= recv(establishedConnectionFD, buffer + i, keyLength - i, 0)){
+                printf("Received: %d bytes in the key \n", i);
+            }
 
-            if (charsRead < 0){  // Checks for an error when reading from the socket
+
+            if (i < 0){  // Checks for an error when reading from the socket
                 error("ERROR reading from socket");
             }
             printf("We read: %s\n", buffer);
