@@ -46,30 +46,6 @@ void enc(int argc, char *argv[]){
         exit(0);
     }
     
-    // Set up the server address struct
-    memset((char*)&serverAddress, '\0', sizeof(serverAddress)); // Clear out the address struct
-    portNumber = atoi(argv[5]); // Get the port number, convert to an integer from a string
-    serverAddress.sin_family = AF_INET; // Create a network-capable socket
-    serverAddress.sin_port = htons(portNumber); // Store the port number
-    serverHostInfo = gethostbyname("localhost"); // Convert the machine name into a special form of address
-    
-    if (serverHostInfo == NULL) {
-        fprintf(stderr, "CLIENT: ERROR, no such host\n");
-        exit(0);
-    }
-    
-    // Copy in the address
-    memcpy((char*)&serverAddress.sin_addr.s_addr, (char*)serverHostInfo->h_addr, serverHostInfo->h_length);
-    
-    // Set up the socket and create the socket endpoint
-    socketFD = socket(AF_INET, SOCK_STREAM, 0); // Create the socket
-    if (socketFD < 0)
-        error("CLIENT: ERROR opening socket");
-    
-    // Connect socket to the server
-    if (connect(socketFD, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
-        error("CLIENT: ERROR connecting");
-    
     /* OPEN FIRST FILE AND SEND FILE SIZE TO SERVER*/
     char message[1000], key[1000];
     
@@ -104,6 +80,38 @@ void enc(int argc, char *argv[]){
     sprintf(messageLengthChar, "%ld", messageLength);  // Convert message length into a character
     sprintf(keyLengthChar, "%ld", keyLength);  // Convert key length into a character
 
+
+    if(keyLength < messageLength){
+        error("Key is too short");
+    } else {
+        printf("Key length = %d, message = %d\n");
+    }
+
+    
+    // Set up the server address struct
+    memset((char*)&serverAddress, '\0', sizeof(serverAddress)); // Clear out the address struct
+    portNumber = atoi(argv[5]); // Get the port number, convert to an integer from a string
+    serverAddress.sin_family = AF_INET; // Create a network-capable socket
+    serverAddress.sin_port = htons(portNumber); // Store the port number
+    serverHostInfo = gethostbyname("localhost"); // Convert the machine name into a special form of address
+    
+    if (serverHostInfo == NULL) {
+        fprintf(stderr, "CLIENT: ERROR, no such host\n");
+        exit(0);
+    }
+    
+    // Copy in the address
+    memcpy((char*)&serverAddress.sin_addr.s_addr, (char*)serverHostInfo->h_addr, serverHostInfo->h_length);
+    
+    // Set up the socket and create the socket endpoint
+    socketFD = socket(AF_INET, SOCK_STREAM, 0); // Create the socket
+    if (socketFD < 0)
+        error("CLIENT: ERROR opening socket");
+    
+    // Connect socket to the server
+    if (connect(socketFD, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
+        error("CLIENT: ERROR connecting");
+    
     /* SEND THE MESSAGE LENGTH TO SERVER*/
     charsWritten = send(socketFD, messageLengthChar, strlen(messageLengthChar), 0);  // Send message to server and write to the server
 
