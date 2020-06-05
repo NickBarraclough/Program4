@@ -55,7 +55,7 @@ void enc(int argc, char *argv[]){
       error("ERROR: Failed to open file.");
     }
     
-    fgets(message, 1000, inFile);  // Put the file into the message variable
+    fgets(message, 80000, inFile);  // Put the file into the message variable
 
     FILE * openKey = fopen(argv[4], "r");  // Open the key given by client
 
@@ -63,7 +63,7 @@ void enc(int argc, char *argv[]){
       error("Failed");
     }
     
-    fgets(key, 1000, openKey);  // Put key file into key variable
+    fgets(key, 80000, openKey);  // Put key file into key variable
 
     FILE * getFileSize = fopen(argv[3], "r+");  // Get file size to determine when to stop recieving
     fseek(getFileSize, 0L, SEEK_END);
