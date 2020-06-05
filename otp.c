@@ -155,10 +155,10 @@ void enc(int argc, char *argv[]){
     }
 
     /* SEND THE MESSAGE TO SERVER */
-    charsWritten = send(socketFD, message, strlen(message), 0);  // Send message to server and write to the server
+//    charsWritten = send(socketFD, message, strlen(message), 0);  // Send message to server and write to the server
 
     for (charsWritten = 0; charsWritten < strlen(message); charsWritten += send(socketFD, message, strlen(message) - charsWritten, 0)){
-        //printf("Sent: %d bytes in the message \n", charsWritten);
+        printf("Sent: %d bytes in the message \n", charsWritten);
     }
 
     if (charsWritten < 0){  // Check for error when writing to socket
