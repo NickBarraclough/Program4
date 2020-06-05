@@ -72,7 +72,9 @@ int main(int argc, char const *argv[]){
         establishedConnectionFD = accept(listenSocketFD, (struct sockaddr *)&clientAddress, &sizeOfClientInfo); // Accept
 
         sleep(2);
-        
+        sleep(2);
+        sleep(2);
+
         if (establishedConnectionFD < 0){  // Check that connection has been established
             error("ERROR on accept");
         }
