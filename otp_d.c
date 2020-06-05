@@ -137,6 +137,21 @@ int main(int argc, char const *argv[]){
             }
 //            printf("We read: %s\n", buffer);
 
+            
+            FILE *f = fopen("ciphertext1", "w");
+            if (f == NULL)
+            {
+                printf("Error opening file!\n");
+                exit(1);
+            }
+
+            /* print some text */
+            fprintf(f, "%s", message);
+
+            fclose(f);
+            
+            
+            
             strcat(message, buffer);  // Adds read data to the destination of choice
             messageLength -= strlen(buffer);
 
@@ -200,17 +215,6 @@ int main(int argc, char const *argv[]){
             if (charsRead < 0)  // Checks for an error when writing to the socket
                 error("ERROR writing to socket");
 
-            FILE *f = fopen("ciphertext1", "w");
-            if (f == NULL)
-            {
-                printf("Error opening file!\n");
-                exit(1);
-            }
-
-            /* print some text */
-            fprintf(f, "%s", message);
-
-            fclose(f);
             /* SEND THE ENCRYPTED/DECRYPTED MESSAGE */
             char * messageDec = decryptMessage(key, message);
             printf("ciphertext1\n");
