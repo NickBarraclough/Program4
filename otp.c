@@ -47,7 +47,7 @@ void enc(int argc, char *argv[]){
     }
     
     /* OPEN FIRST FILE AND SEND FILE SIZE TO SERVER*/
-    char message[1000], key[1000];
+    char message[80000], key[80000];
     
     FILE * inFile = fopen(argv[3], "r");  // Open the file given by client
 
@@ -237,8 +237,8 @@ void dec(int argc, char* argv[]){
     char messageLengthC[1000];
     char keyLengthC[1000];
     char buffer[80000];
-    char message[1000];
-    char key[1000];
+    char message[80000];
+    char key[80000];
     char usern[100];
     FILE* findFileSize;
     FILE* findKeySize;
