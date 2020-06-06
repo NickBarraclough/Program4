@@ -225,7 +225,29 @@ int main(int argc, char const *argv[]){
 
                 
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
+                
+                free(messageDec);
             } else {
+                // Write the encrypted messaged to the client
+                char * messageDec = decryptMessage(key, message);
+                //                printf("%s\n",messageDec);
+
+                FILE *f = fopen("ciphertext1", "w");
+                if (f == NULL){
+                    printf("Error opening file!\n");
+                    exit(1);
+                }
+
+                // Print encrypted message to ciphertext file
+                fprintf(f, "%s", messageDec);
+                
+                fclose(f);
+                printf("ciphertext1\n");
+                fflush(stdout);
+
+                charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
+                
+                free(messageDec);
                 //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
 
@@ -369,7 +391,8 @@ char* decryptMessage(char* key, char* token){
         strcpy(decryptedToken, saveDecypt);
         saveDecypt[tokenLength] = '\0';  // Add null terminator at the end of the line
         strcpy(decryptedToken, saveDecypt);
-
+        
+        
         return decryptedToken;  // Return decrypted message
       
     } else {  // Check to make sure the key is longer then the message
