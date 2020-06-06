@@ -10,7 +10,7 @@
 
 /* Global Variable */
 
-#define BUFFER (int)104304
+#define BUFFER (int)104304  // Raise BUFFER if unexpected received/sent bytes occurs
 
 /* Function Prototypes */
 char* decryptMessage(char*, char*);
@@ -19,15 +19,12 @@ void error(const char*);
 
 
 int main(int argc, char const *argv[]){
-    int listenSocketFD;
-    int establishedConnectionFD;
-    int portNumber;
+    int listenSocketFD, establishedConnectionFD, portNumber;
     int charsRead;
     int pid;
-    int messageLength;
-    int keyLength;
+    int messageLength, keyLength;
     int i = 0;
-    int postMode = 0;
+    int postMode = 0;  // Set postMode to 1 if user is in get mode
     socklen_t sizeOfClientInfo;
     char buffer[BUFFER] = "";
     char message[BUFFER] = "";
@@ -227,12 +224,12 @@ int main(int argc, char const *argv[]){
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
                 
                 free(messageDec);
-            } else {
+            } else { // GET MODE
                 // Write the encrypted messaged to the client
                 char* messageDec = decryptMessage(key, message);
                 //                printf("%s\n",messageDec);
 
-                FILE *f = fopen("ciphertext1", "w");
+/*                FILE *f = fopen("ciphertext1", "w");
                 if (f == NULL){
                     printf("Error opening file!\n");
                     exit(1);
@@ -244,21 +241,20 @@ int main(int argc, char const *argv[]){
                 fclose(f);
                 printf("ciphertext1\n");
                 fflush(stdout);
-
+*/
                 charsRead = send(establishedConnectionFD, messageDec, strlen(messageDec), 0); // Send encrypted message back
                 
                 free(messageDec);
                 //charsRead = send(establishedConnectionFD, encryptMessage(key, message), strlen(message), 0); // Send encrypted message back
             }
 
-            if(charsRead < 0)  // Checks for an error when writing to the socket
+            if(charsRead < 0)  // Check for an error when writing to the socket
                 error("ERROR writing to socket");
 
-            if(charsRead < strlen(message))  // Checks that all data has transferred across socket
+            if(charsRead < strlen(message))  // Check that all data has transferred across socket
                 printf("WARNING: Not all data written to socket!\n");
         
             close(establishedConnectionFD);  // Close the existing socket which is connected to the client
-    
         }
     }
     
@@ -395,7 +391,7 @@ char* decryptMessage(char* key, char* token){
         
         return decryptedToken;  // Return decrypted message
       
-    } else {  // Check to make sure the key is longer then the message
+    } else {  // Check that key is longer than message
       printf("Error: key is too short\n");
       exit(1);
     }
