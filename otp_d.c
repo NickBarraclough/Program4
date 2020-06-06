@@ -209,7 +209,7 @@ int main(int argc, char const *argv[]){
                 char * messageDec = encryptMessage(key, message);
 //                printf("%s\n",messageDec);
 
-                FILE *f = fopen("ciphertext1", "w");
+                FILE * f = fopen("ciphertext1", "w");
                 if (f == NULL)
                 {
                     printf("Error opening file!\n");
@@ -229,7 +229,7 @@ int main(int argc, char const *argv[]){
                 free(messageDec);
             } else {
                 // Write the encrypted messaged to the client
-                char * messageDec = decryptMessage(key, message);
+                char* messageDec = decryptMessage(key, message);
                 //                printf("%s\n",messageDec);
 
                 FILE *f = fopen("ciphertext1", "w");
