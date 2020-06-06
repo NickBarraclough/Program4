@@ -1,3 +1,4 @@
+/* otp_d SERVER, DAEMON */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-/* Global Variables */
+/* Global Variable */
 
 #define BUFFER (int)104304
 
@@ -208,18 +209,18 @@ int main(int argc, char const *argv[]){
                 char * messageDec = encryptMessage(key, message);
 //                printf("%s\n",messageDec);
 
-                FILE *f = fopen("ciphertext1", "w");
+                FILE *f = fopen("ciphertext", "w");
                 if (f == NULL)
                 {
                     printf("Error opening file!\n");
                     exit(1);
                 }
 
-                /* print some text */
+                // Print encrypted message to ciphertext file
                 fprintf(f, "%s", messageDec);
 
                 fclose(f);
-                printf("ciphertext1");
+                printf("/ciphertext\n");
                 fflush(stdout);
 
                 
@@ -254,18 +255,18 @@ char* encryptMessage(char* key, char* token){
     int j = 0;
     char saveEncrypt[BUFFER];
     char* encryptedToken;
-    char* keyCharacters;
+    char* keyChars;
 
-    tokenLength = strlen(token);  // Finds the length of the message
-    keyLength = strlen(key);  // Finds the length of the key
+    tokenLength = strlen(token);
+    keyLength = strlen(key);
 
-    if(keyLength > tokenLength){  // Check to make sure the key is longer then the message
-        encryptedToken = malloc(tokenLength * sizeof(char));  // Allocate memory because we cant return a local variable
-        keyCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";  // Valid characters that we can choose from
+    if(keyLength > tokenLength){  // Check that key is longer than message
+        encryptedToken = malloc(tokenLength * sizeof(char));
+        keyChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";  // Acceptable characters
 
         for(j = 0; j < tokenLength; j++){  // Loop through the length of the provided token
             if((token[i] < 65 || token[i] > 90) && (token[i] != ' ')){  // Check that all characters are valid
-                fprintf(stderr, "otp_enc_d error: input contains bad characters\n");
+                fprintf(stderr, "Error: input contains bad characters.\n");
                 exit(1);
             }
         }
@@ -274,22 +275,22 @@ char* encryptMessage(char* key, char* token){
             if ((token[i] != ' ') && (key[i] != ' ')){  // Check if both characters are letters
                 tokenValue = token[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 keyValue = key[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
-                saveEncrypt[i] = ("%c", keyCharacters[(tokenValue + keyValue) % 27]);  // Save the encrypted character
+                saveEncrypt[i] = ("%c", keyChars[(tokenValue + keyValue) % 27]);  // Save the encrypted character
             }
             else if(token[i] != ' ' && key[i] == ' '){  // Check to see if message is a character and key is a space
                 tokenValue = token[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 keyValue = key[i] - 6;  // Since this is a space subtract by the ascii value of 6
-                saveEncrypt[i] = ("%c", keyCharacters[(tokenValue + keyValue) % 27]);  // Save the encrypted character
+                saveEncrypt[i] = ("%c", keyChars[(tokenValue + keyValue) % 27]);  // Save the encrypted character
             }
             else if(token[i] == ' ' && key[i] != ' '){  // Check to see if key is a character and key is a character
                 tokenValue = token[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 keyValue = key[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
-                saveEncrypt[i] = ("%c", keyCharacters[(tokenValue + keyValue) % 27]);   // Save the encrypted character
+                saveEncrypt[i] = ("%c", keyChars[(tokenValue + keyValue) % 27]);   // Save the encrypted character
             }
             else {  // Check to see if both of the characters are a space
                 tokenValue = token[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 keyValue = key[i] - 6;  // Since this is a space subtract by the ascii value of 6
-                saveEncrypt[i] = ("%c", keyCharacters[(tokenValue + keyValue) % 27]);  // Save the encrypted character
+                saveEncrypt[i] = ("%c", keyChars[(tokenValue + keyValue) % 27]);  // Save the encrypted character
             }
 
             i++;  // Increment i
@@ -317,60 +318,60 @@ char* decryptMessage(char* key, char* token){
     int i = 0;
     char saveDecypt[BUFFER];
     char* decryptedToken;
-    char* keyCharacters;
+    char* keyChars;
 
-    tokenLength = strlen(token);  // Finds the length of the message
-    keyLength = strlen(key);  // Finds the length of the key
+    tokenLength = strlen(token);
+    keyLength = strlen(key);
 
-    if (keyLength > tokenLength){  // Check to make sure the key is longer then the message
-        decryptedToken = malloc(tokenLength * sizeof(char));  // Allocate memory because we cant return a local variable
-        keyCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";  // Valid characters that we can choose from
+    if (keyLength > tokenLength){  // Check that key is longer than message
+        decryptedToken = malloc(tokenLength * sizeof(char));
+        keyChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";  // Acceptable characters
 
-        while (i < tokenLength - 1){  // Loop through the length of the message
-            if (token[i] != ' ' && key[i] != ' '){  // Check to see if both of the characters are letter
+        while (i < tokenLength - 1){  // Loop through message
+            if (token[i] != ' ' && key[i] != ' '){  // Check if both characters are a letter
                 tokenValue = token[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 keyValue = key[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 if (tokenValue < keyValue) {  // If the token value is less adjust by 27 to pick the correct character
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
-                } else {  // If positive then pick character as normal
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue) % 27]);  // Save the decrypted character
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
+                } else {  // Pick character as normal
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue) % 27]);  // Save the decrypted character
                 }
-            } else if (token[i] != ' ' && key[i] == ' '){  // Check to see if token is a character and key is a character
+            } else if (token[i] != ' ' && key[i] == ' '){  // Check to see if token is a character and key is a space
                 tokenValue = token[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 keyValue = key[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 if (tokenValue < keyValue){  // If the token value is less adjust by 27 to pick the correct character
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
-                } else {  // If positive then pick character as normal
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue) % 27]);  // Save the decrypted character
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
+                } else {  // Pick character as normal
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue) % 27]);  // Save the decrypted character
                 }
-            } else if (token[i] == ' ' && key[i] != ' '){  // Check to see if message is a character and key is a space
+            } else if (token[i] == ' ' && key[i] != ' '){  // Check to see if token is a space and key is a character
                 tokenValue = token[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 keyValue = key[i] - 65;  // Since this is a letter subtract by the ascii value of A == 65
                 if(tokenValue < keyValue){  // If the token value is less adjust by 27 to pick the correct character
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
-                } else {   // If positive then pick character as normal
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue) % 27]);  // Save the decrypted character
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
+                } else {   // Pick character as normal
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue) % 27]);  // Save the decrypted character
                 }
-            } else {  // Check to see if both of the characters are a space
+            } else {  // If both of the characters are a space
                 tokenValue = token[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 keyValue = key[i] - 6;  // Since this is a space subtract by the ascii value of 6
                 if(tokenValue < keyValue){  // If the token value is less adjust by 27 to pick the correct character
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue + 27) % 27]); // Save the decrypted character
             
-                } else {  // If positive then pick character as normal
-                    saveDecypt[i] = ("%c", keyCharacters[(tokenValue - keyValue) % 27]);  // Save the decrypted character
+                } else {  // Pick character as normal
+                    saveDecypt[i] = ("%c", keyChars[(tokenValue - keyValue) % 27]);  // Save the decrypted character
                 }
             }
 
-            i++;  // Increment i
+            i++;
         }
 
-        saveDecypt[tokenLength - 1] = '\n';  // Create a newline character at the end of the line
+        saveDecypt[tokenLength - 1] = '\n';  // Add newline character at the end of the line
         strcpy(decryptedToken, saveDecypt);
-        saveDecypt[tokenLength] = '\0';  // Create a null terminator at the end of the line
+        saveDecypt[tokenLength] = '\0';  // Add null terminator at the end of the line
         strcpy(decryptedToken, saveDecypt);
 
-        return decryptedToken;  // Return the decrypted message
+        return decryptedToken;  // Return decrypted message
       
     } else {  // Check to make sure the key is longer then the message
       printf("Error: key is too short\n");

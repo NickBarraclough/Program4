@@ -1,3 +1,4 @@
+/* CLIENT */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,31 +11,26 @@
 
 /* Function Prototypes */
 void error(const char*);
-void enc(int, char**);
-void dec(int, char**);
+void postFunc(int, char**);
+void getFunc(int, char**);
 
- // Error function used for reporting issues
-void error(const char *msg){
-    perror(msg);
-    exit(1);
-}
 
 int main(int argc, char *argv[]){
     
     // otp post user plaintext key port
     if (strcmp(argv[1], "post") == 0){
-        enc(argc, argv);
+        postFunc(argc, argv);
     }
     
     // otp get user key port
     if (strcmp(argv[1], "get") == 0){
-        dec(argc, argv);
+        getFunc(argc, argv);
     }
     
     return 0;
 }
     
-void enc(int argc, char *argv[]){
+void postFunc(int argc, char *argv[]){
     int socketFD, portNumber, charsWritten, charsRead;
     struct sockaddr_in serverAddress;
     struct hostent* serverHostInfo;
@@ -229,39 +225,30 @@ void enc(int argc, char *argv[]){
 }
 
     
-void dec(int argc, char* argv[]){
+void getFunc(int argc, char* argv[]){
 
     int socketFD, portNumber, charsWritten, charsRead;
-    long int messageLength;
-    long int keyLength;
-    char messageLengthC[80000];
-    char keyLengthC[80000];
+    struct sockaddr_in serverAddress;
+    struct hostent* serverHostInfo;
     char buffer[80000];
     char message[80000];
     char key[80000];
     char usern[100];
-    FILE* findFileSize;
-    FILE* findKeySize;
-    FILE* openFile;
-    FILE* openKey;
-    struct sockaddr_in serverAddress;
-    struct hostent* serverHostInfo;
 
-    if (argc != 6){   // Check usage & args
+    if (argc != 4){   // Check usage & args
         fprintf(stderr,"USAGE: %s hostname port\n", argv[0]);
         exit(0);
     }
     
-    
-    openFile = fopen(argv[1], "r");  // Open the file provided from the client
+    FILE * openFile = fopen(argv[1], "r");  // Open the file provided from the client
 
-    if(openFile == NULL)   // Make sure the file was opened successfully
+    if(openFile == NULL)   // Check that file opened successfully
     {
         error("Failed");
     }
-    fgets(message, 1000, openFile);   // Puts the file into the message variable
+    fgets(message, 1000, openFile);   // Put the file into the message variable
 
-    openKey = fopen(argv[2], "r");  // Open the key provided from the client
+    FILE * openKey = fopen(argv[2], "r");  // Open the key provided from the client
 
     if(openKey == NULL)  // Make sure the key was opened successfully
     {
@@ -269,15 +256,18 @@ void dec(int argc, char* argv[]){
     }
     fgets(key, 1000, openKey);  // Puts the key into the key variable
 
-    findFileSize = fopen(argv[1], "r+");  // Find the file size in order determine when when to stop recieving
+    long int messageLength;
+    FILE * findFileSize = fopen(argv[1], "r+");  // Find message file size to determine when to stop receiving
     fseek(findFileSize, 0L, SEEK_END);
     messageLength = ftell(findFileSize);
-    fclose(findFileSize);  // Close the file once finished
+    fclose(findFileSize);
 
-    findKeySize = fopen(argv[2], "r+");  // Find the key file size in order determine when when to stop recieving
+    
+    long int keyLength;
+    FILE * findKeySize = fopen(argv[2], "r+");  // Find key file size to determine when to stop receiving
     fseek(findKeySize, 0L, SEEK_END);
     keyLength = ftell(findKeySize);
-    fclose(findKeySize);  // Close the key file once finished
+    fclose(findKeySize);
 
     if(keyLength < messageLength){
         error("Key is too short");
@@ -301,7 +291,7 @@ void dec(int argc, char* argv[]){
 
     memcpy((char*)&serverAddress.sin_addr.s_addr, (char*)serverHostInfo->h_addr, serverHostInfo->h_length); // Copy in the address
 
-    socketFD = socket(AF_INET, SOCK_STREAM, 0);  // Set up the socket and create the socket
+    socketFD = socket(AF_INET, SOCK_STREAM, 0);  // Set up the socket and create the socket file descriptor
     
     if(socketFD < 0)
     {
@@ -313,7 +303,8 @@ void dec(int argc, char* argv[]){
         error("CLIENT: ERROR connecting");
     }
     
-    
+    char messageLengthC[80000];
+    char keyLengthC[80000];
     sprintf(messageLengthC, "%ld", messageLength);
     sprintf(keyLengthC, "%ld", keyLength);
 
@@ -440,4 +431,10 @@ void dec(int argc, char* argv[]){
 
     close(socketFD);  // Close the socket
 
+}
+
+/* Error function used for reporting issues */
+void error(const char *msg){
+    perror(msg);
+    exit(1);
 }
