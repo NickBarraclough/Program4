@@ -235,7 +235,7 @@ void getFunc(int argc, char* argv[]){
     char key[80000];
     char usern[100];
 
-    if (argc != 4){   // Check usage & args
+    if (argc != 5){   // Check usage & args
         fprintf(stderr,"USAGE: %s hostname port\n", argv[0]);
         exit(0);
     }
@@ -246,7 +246,7 @@ void getFunc(int argc, char* argv[]){
     {
         error("Failed");
     }
-    fgets(message, 1000, openFile);   // Put the file into the message variable
+    fgets(message, 80000, openFile);   // Put the file into the message variable
 
     FILE * openKey = fopen(argv[2], "r");  // Open the key provided from the client
 
@@ -254,7 +254,7 @@ void getFunc(int argc, char* argv[]){
     {
         error("Failed");
     }
-    fgets(key, 1000, openKey);  // Puts the key into the key variable
+    fgets(key, 80000, openKey);  // Puts the key into the key variable
 
     long int messageLength;
     FILE * findFileSize = fopen(argv[1], "r+");  // Find message file size to determine when to stop receiving
@@ -358,7 +358,9 @@ void getFunc(int argc, char* argv[]){
 
       /* SEND THE MESSAGE */
 
-    charsWritten = send(socketFD, message, strlen(message), 0);  // Send message to server and write to the server
+    for (charsWritten = 0; charsWritten < strlen(message); charsWritten += send(socketFD, message, strlen(message) - charsWritten, 0)){
+//        printf("Sent: %d bytes in the message \n", charsWritten);
+    }
 
     if(charsWritten < 0)  // Checks for an error when writing to the socket
     {
@@ -379,7 +381,9 @@ void getFunc(int argc, char* argv[]){
 
     /* SEND THE KEY */
 
-    charsWritten = send(socketFD, key, strlen(key), 0);  // Send message to server and write to the server
+    for (charsWritten = 0; charsWritten < strlen(key); charsWritten += send(socketFD, key, strlen(key) - charsWritten, 0)){
+//
+    }
 
     if(charsWritten < 0)  // Checks for an error when writing to the socket
     {
@@ -425,7 +429,7 @@ void getFunc(int argc, char* argv[]){
                 error("CLIENT: ERROR reading from socket");
             }
             messageLength -= strlen(buffer);  // Decrements the length
-            //printf("%s", buffer);  // Adds read data to the destination of choice
+            printf("%s", buffer);  // Adds read data to the destination of choice
         }
     }
 
